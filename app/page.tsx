@@ -52,6 +52,7 @@ export default function GhibliAI() {
     try {
       // 开始准备请求
       setProgress(5)
+      console.log('🚀 开始生成图片...', { prompt, aspectRatio, quality })
       
       // 创建一个模拟真实进度的函数
       let currentProgress = 5
@@ -79,12 +80,15 @@ export default function GhibliAI() {
       
       // API响应接收完成
       setProgress(90)
+      console.log(`📥 收到响应: ${response.status} ${response.statusText}`)
 
       const data = await response.json()
+      console.log('📄 响应数据:', data)
 
       if (data.success) {
         // 开始处理响应数据
         setProgress(95)
+        console.log('✅ 图片生成成功:', data.imageUrl)
         
         const newImage: GeneratedImage = {
           id: Date.now().toString(),
@@ -104,11 +108,30 @@ export default function GhibliAI() {
         // 完成
         setProgress(100)
       } else {
-        throw new Error(data.error)
+        console.error('❌ API返回错误:', data)
+        throw new Error(data.error || '未知错误')
       }
     } catch (error) {
-      console.error("生成失败:", error)
-      alert("图片生成失败，请稍后重试")
+      console.error("🚨 生成失败:", error)
+      
+      // 显示更详细的错误信息
+      let errorMessage = "图片生成失败，请稍后重试"
+      
+      if (error instanceof Error) {
+        if (error.message.includes('Failed to fetch') || error.message.includes('网络错误')) {
+          errorMessage = "网络连接失败，请检查网络连接或稍后重试"
+        } else if (error.message.includes('API密钥')) {
+          errorMessage = "API配置错误，请联系管理员"
+        } else if (error.message.includes('余额')) {
+          errorMessage = "API账户余额不足，请充值后重试"
+        } else if (error.message.includes('超时')) {
+          errorMessage = "请求超时，请稍后重试"
+        } else {
+          errorMessage = `生成失败: ${error.message}`
+        }
+      }
+      
+      alert(errorMessage)
       setProgress(0)
     } finally {
       setIsGenerating(false)
