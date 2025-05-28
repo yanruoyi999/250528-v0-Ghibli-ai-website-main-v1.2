@@ -49,25 +49,10 @@ export default function GhibliAI() {
     setIsGenerating(true)
     setProgress(0)
 
-<<<<<<< HEAD
     try {
       // 真实进度反馈：开始API调用
       setProgress(10)
       
-=======
-    // 模拟进度条
-    const progressInterval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 90) {
-          clearInterval(progressInterval)
-          return 90
-        }
-        return prev + Math.random() * 15
-      })
-    }, 500)
-
-    try {
->>>>>>> 183c47a322ce8a45d5a139d3ae8b033760e3155d
       const response = await fetch("/api/generate", {
         method: "POST",
         headers: {
@@ -80,7 +65,6 @@ export default function GhibliAI() {
         }),
       })
 
-<<<<<<< HEAD
       // API响应接收完成
       setProgress(60)
 
@@ -90,11 +74,6 @@ export default function GhibliAI() {
         // 开始处理响应数据
         setProgress(80)
         
-=======
-      const data = await response.json()
-
-      if (data.success) {
->>>>>>> 183c47a322ce8a45d5a139d3ae8b033760e3155d
         const newImage: GeneratedImage = {
           id: Date.now().toString(),
           url: data.imageUrl,
@@ -106,18 +85,12 @@ export default function GhibliAI() {
         setCurrentImage(newImage)
 
         // 保存到 localStorage
-<<<<<<< HEAD
         setProgress(90)
-=======
->>>>>>> 183c47a322ce8a45d5a139d3ae8b033760e3155d
         const savedImages = JSON.parse(localStorage.getItem("ghibli-images") || "[]")
         savedImages.unshift(newImage)
         localStorage.setItem("ghibli-images", JSON.stringify(savedImages.slice(0, 20))) // 只保存最近20张
 
-<<<<<<< HEAD
         // 完成
-=======
->>>>>>> 183c47a322ce8a45d5a139d3ae8b033760e3155d
         setProgress(100)
       } else {
         throw new Error(data.error)
@@ -125,18 +98,11 @@ export default function GhibliAI() {
     } catch (error) {
       console.error("生成失败:", error)
       alert("图片生成失败，请稍后重试")
-<<<<<<< HEAD
       setProgress(0)
     } finally {
       setIsGenerating(false)
       // 3秒后重置进度条
       setTimeout(() => setProgress(0), 3000)
-=======
-    } finally {
-      clearInterval(progressInterval)
-      setIsGenerating(false)
-      setTimeout(() => setProgress(0), 2000)
->>>>>>> 183c47a322ce8a45d5a139d3ae8b033760e3155d
     }
   }
 
