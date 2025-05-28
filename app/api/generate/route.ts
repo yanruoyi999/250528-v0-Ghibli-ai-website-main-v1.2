@@ -27,8 +27,14 @@ export async function POST(request: NextRequest) {
       aspectRatio,
       imageSize,
       quality,
-      promptLength: ghibliPrompt.length
+      promptLength: ghibliPrompt.length,
+      apiKey: process.env.GHIBLI_API_KEY ? '已配置' : '未配置'
     })
+
+    // 检查API密钥
+    if (!process.env.GHIBLI_API_KEY) {
+      throw new Error("API密钥未配置，请在环境变量中设置GHIBLI_API_KEY")
+    }
 
     const response = await fetch("https://api.gptsapi.net/v1/images/generations", {
       method: "POST",
@@ -37,7 +43,7 @@ export async function POST(request: NextRequest) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "gemini-2.5-flash-preview",
+        model: "dall-e-3",
         prompt: ghibliPrompt,
         n: 1,
         size: imageSize,
