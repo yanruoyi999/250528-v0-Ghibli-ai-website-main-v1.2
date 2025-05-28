@@ -50,9 +50,18 @@ export default function GhibliAI() {
     setProgress(0)
 
     try {
-      // 真实进度反馈：开始API调用
-      setProgress(10)
+      // 开始准备请求
+      setProgress(5)
       
+      // 创建一个模拟真实进度的函数
+      let currentProgress = 5
+      const progressInterval = setInterval(() => {
+        if (currentProgress < 85) {
+          currentProgress += Math.random() * 3 + 1 // 每次增加1-4%
+          setProgress(Math.min(currentProgress, 85))
+        }
+      }, 200) // 每200ms更新一次
+
       const response = await fetch("/api/generate", {
         method: "POST",
         headers: {
@@ -65,14 +74,17 @@ export default function GhibliAI() {
         }),
       })
 
+      // 清除进度模拟
+      clearInterval(progressInterval)
+      
       // API响应接收完成
-      setProgress(60)
+      setProgress(90)
 
       const data = await response.json()
 
       if (data.success) {
         // 开始处理响应数据
-        setProgress(80)
+        setProgress(95)
         
         const newImage: GeneratedImage = {
           id: Date.now().toString(),
@@ -85,7 +97,6 @@ export default function GhibliAI() {
         setCurrentImage(newImage)
 
         // 保存到 localStorage
-        setProgress(90)
         const savedImages = JSON.parse(localStorage.getItem("ghibli-images") || "[]")
         savedImages.unshift(newImage)
         localStorage.setItem("ghibli-images", JSON.stringify(savedImages.slice(0, 20))) // 只保存最近20张

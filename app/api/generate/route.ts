@@ -8,14 +8,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "请输入场景描述" }, { status: 400 })
     }
 
-    // 构建完整的吉卜力风格提示词 - 更具体和准确的风格描述
-    const ghibliPrompt = `Studio Ghibli anime style, ${prompt}, Hayao Miyazaki art style, cel animation, watercolor backgrounds, soft pastel colors, dreamy atmosphere, whimsical characters, detailed natural environments, magical realism, gentle lighting, hand-painted textures, traditional 2D animation aesthetic, nostalgic mood, peaceful composition`
+    // 构建完整的吉卜力风格提示词 - 更专业和准确的风格描述
+    const ghibliPrompt = `Studio Ghibli anime style, masterpiece, ${prompt}, in the style of Hayao Miyazaki, Joe Hisaishi inspired, traditional 2D cel animation, hand-drawn watercolor backgrounds, soft natural lighting, dreamy pastel color palette, intricate environmental details, magical realism atmosphere, whimsical character design, nostalgic and peaceful mood, flowing organic shapes, detailed nature scenes with lush vegetation, gentle wind effects, ethereal clouds, warm golden hour lighting, traditional Japanese art influences, fantasy elements seamlessly integrated into natural settings, emotional depth, cinematic composition`
 
-    // 获取对应的图片尺寸
+    // 获取对应的图片尺寸 - 确保3:4比例正确
     const sizeMap: Record<string, string> = {
       "1:1": "1024x1024",
-      "4:3": "1024x768", 
-      "3:4": "768x1024",
+      "4:3": "1152x896", 
+      "3:4": "896x1152",
       "16:9": "1792x1024",
       "9:16": "1024x1792"
     }
